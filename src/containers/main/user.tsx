@@ -25,17 +25,21 @@ interface UserProps {
     id: number;
     name: string;
   };
-  removeUser: () => void;
+  removeUser: (id: number) => void;
 }
 
 const User: React.FC<UserProps> = ({ data, removeUser }) => {
+  const onDragStart = (event: React.DragEvent<HTMLElement>) => {
+    console.log("drag start!", event);
+  };
+
   return (
-    <UserBox>
+    <UserBox draggable onDragStart={onDragStart}>
       <Icon
         iconTitle="trash-empty"
         size={16}
         iconColor="#fff"
-        onClick={() => removeUser}
+        onClick={() => removeUser(data.id)}
       />
       <p>{data.name}</p>
     </UserBox>

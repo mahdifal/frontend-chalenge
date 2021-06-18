@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import User from "./user";
 import styled from "styled-components";
 import Icon from "../../components/icon/icon";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../state/reducers/rootReducer";
+import { addUser, IUser, removeUser } from "../../state/actions/userAction";
 
 const Wrapper = styled.div`
   display: flex;
@@ -34,10 +37,15 @@ const AddButton = styled.div`
   margin-bottom: 1rem;
 `;
 
+// type UserType = {
+//   id: number;
+//   name: string;
+// }[];
+
 type UserType = {
   id: number;
   name: string;
-}[];
+};
 
 const userList = [
   {
@@ -59,24 +67,33 @@ const userList = [
 ];
 
 const Main: React.FC = () => {
-  const [user, setUser] = useState<UserType>(userList);
+  // const [user, setUser] = useState<UserType>(userList);
+  const users = useSelector((state: any) => state.userState.users);
+  const dispatch = useDispatch();
 
   const handleAddUser = () => {
-    setUser((prev) => [
-      ...user,
-      { id: Date.now() * Math.random(), name: "User1" },
-    ]);
+    let user: UserType = {
+      id: Date.now() * Math.random(),
+      name: "User1",
+    };
+
+    dispatch(addUser(user));
   };
 
-  const handleRemoveUser = () => {
-    console.log("user remove");
+  const handleRemoveUser = (user: IUser) => {
+    dispatch(removeUser(user));
   };
 
   return (
     <Wrapper>
       <UserWrapper className="flexcontainer wrap row">
-        {user?.map((item) => (
-          <User key={item.id} data={item} removeUser={handleRemoveUser} />
+        {users?.map((item: any) => (
+          <User
+            key={item.id}
+            data={item}
+            removeUser={() => handleRemoveUser(item.id)}
+            // removeUser={() => dispatch(removeUser(item.id))}
+          />
         ))}
       </UserWrapper>
       <AddButton onClick={handleAddUser}>
