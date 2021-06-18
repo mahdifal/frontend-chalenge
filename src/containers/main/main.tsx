@@ -22,59 +22,36 @@ const UserWrapper = styled.div`
   height: 100%;
 `;
 
-const AddButton = styled.div`
+const AddButton = styled.div<{ color: string; cursor?: string }>`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 100%;
   justify-content: center;
   align-items: center;
-  background-color: #05b6d4;
+  background-color: ${(props) => props.color};
   padding-top: 5px;
   padding-left: 1px;
   align-self: end;
-  cursor: pointer;
+  cursor: ${(props) => props.cursor};
   margin: 0 auto;
   margin-bottom: 1rem;
 `;
-
-// type UserType = {
-//   id: number;
-//   name: string;
-// }[];
 
 type UserType = {
   id: number;
   name: string;
 };
 
-const userList = [
-  {
-    id: Date.now() * Math.random(),
-    name: "User1",
-  },
-  {
-    id: Date.now() * Math.random(),
-    name: "User2",
-  },
-  {
-    id: Date.now() * Math.random(),
-    name: "User3",
-  },
-  {
-    id: Date.now() * Math.random(),
-    name: "User4",
-  },
-];
-
 const Main: React.FC = () => {
-  // const [user, setUser] = useState<UserType>(userList);
   const users = useSelector((state: any) => state.userState.users);
   const dispatch = useDispatch();
+
+  const userLength = users.length;
 
   const handleAddUser = () => {
     let user: UserType = {
       id: Date.now() * Math.random(),
-      name: "User1",
+      name: `User${userLength + 1}`,
     };
 
     dispatch(addUser(user));
@@ -84,6 +61,17 @@ const Main: React.FC = () => {
     dispatch(removeUser(user));
   };
 
+  const renderAddButton =
+    userLength >= 12 ? (
+      <AddButton color="#fff">
+        <Icon iconColor="#e7e7e7" size={26} iconTitle="plus" />
+      </AddButton>
+    ) : (
+      <AddButton onClick={handleAddUser} color="#05b6d4" cursor="pointer">
+        <Icon iconColor="#fff" size={26} iconTitle="plus" />
+      </AddButton>
+    );
+
   return (
     <Wrapper>
       <UserWrapper className="flexcontainer wrap row">
@@ -92,13 +80,10 @@ const Main: React.FC = () => {
             key={item.id}
             data={item}
             removeUser={() => handleRemoveUser(item.id)}
-            // removeUser={() => dispatch(removeUser(item.id))}
           />
         ))}
       </UserWrapper>
-      <AddButton onClick={handleAddUser}>
-        <Icon iconColor="#fff" size={26} iconTitle="plus" />
-      </AddButton>
+      {renderAddButton}
     </Wrapper>
   );
 };
