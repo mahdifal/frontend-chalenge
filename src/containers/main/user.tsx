@@ -30,9 +30,10 @@ interface UserProps {
 }
 
 const User: React.FC<UserProps> = ({ data, removeUser }) => {
+  const nodeRef = React.useRef(null);
   return (
-    <Draggable bounds="parent">
-      <UserBox>
+    <Draggable bounds="parent" nodeRef={nodeRef}>
+      <UserBox ref={nodeRef}>
         <Icon
           iconTitle="trash-empty"
           size={16}

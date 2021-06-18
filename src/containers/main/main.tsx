@@ -1,9 +1,7 @@
-import React, { useState } from "react";
 import User from "./user";
 import styled from "styled-components";
 import Icon from "../../components/icon/icon";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../state/reducers/rootReducer";
 import { addUser, IUser, removeUser } from "../../state/actions/userAction";
 
 const Wrapper = styled.div`
